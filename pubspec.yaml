@@ -1,0 +1,37 @@
+name: oupi
+description: "Oupi, appli éducative 3-5 ans"
+publish_to: 'none'
+
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.13.7
+
+dependencies:
+  flutter:
+    sdk: flutter
+  video_player: ^2.14.1
+  shared_preferences: ^2.5.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/data/
+    - assets/data/interactions/
+
+  # Polices embarquées (licence SIL OFL, voir assets/fonts/OFL-*.txt) :
+  # aucune requête réseau vers un serveur tiers, comme l'exigent les catégories Enfants.
+  fonts:
+    - family: Fredoka
+      fonts:
+        - asset: assets/fonts/Fredoka.ttf
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito.ttf

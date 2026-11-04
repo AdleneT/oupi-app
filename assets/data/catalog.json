@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "episodes": [
+    {
+      "id": "ep01", "number": 1, "family": "couleurs", "theme": "Couleurs", "title": null,
+      "notion": "Rouge, jaune, bleu",
+      "pitch": "Le ventre d'Oupi a perdu ses couleurs ; l'enfant l'aide à les retrouver dans la nature.",
+      "activity": { "title": "Chasse aux couleurs dans la maison" },
+      "song": null, "access": "free", "durationSeconds": 300, "video": null, "interactions": null
+    },
+    {
+      "id": "ep02", "number": 2, "family": "formes", "theme": "Formes", "title": null,
+      "notion": "Rond, carré, triangle",
+      "pitch": "Construire une maison pour Lolo avec des formes.",
+      "activity": { "title": "Coller des formes découpées pour faire une maison" },
+      "song": null, "access": "free", "durationSeconds": 300, "video": null, "interactions": null
+    },
+    {
+      "id": "ep03", "number": 3, "family": "chiffres", "theme": "Chiffres", "title": null,
+      "notion": "Compter de 1 à 5",
+      "pitch": "Ramasser 5 pommes pour un pique-nique.",
+      "activity": { "title": "Compter des objets et les ranger" },
+      "song": null, "access": "free", "durationSeconds": 300, "video": null, "interactions": null
+    },
+    {
+      "id": "ep04", "number": 4, "family": "emotions", "theme": "Émotions 1", "title": "Un cadeau pour Lolo",
+      "notion": "La tristesse et la joie",
+      "pitch": "Lolo est triste parce que son ballon s'est envolé. L'enfant aide Oupi à lui offrir un dessin, et Lolo retrouve le sourire.",
+      "activity": {
+        "title": "Un dessin-cadeau",
+        "duration": "10 à 15 minutes",
+        "materials": ["Une feuille", "Des crayons ou des feutres", "Des gommettes si vous en avez"],
+        "steps": [
+          "Choisissez ensemble à qui offrir le dessin : un grand-parent, un copain, la maîtresse…",
+          "Votre enfant dessine quelque chose qui fera plaisir à cette personne.",
+          "Offrez le dessin ensemble et regardez sa réaction."
+        ],
+        "question": "À ton avis, comment il va se sentir quand il verra ton dessin ?"
+      },
+      "song": "Triste ou content", "access": "free", "durationSeconds": 300, "video": null,
+      "interactions": "assets/data/interactions/ep04.json"
+    },
+    {
+      "id": "ep05", "number": 5, "family": "routines", "theme": "Routines", "title": null,
+      "notion": "Se brosser les dents",
+      "pitch": "Oupi apprend à se brosser les dents avant de dormir.",
+      "activity": { "title": "Geste du soir : montrer à un grand comment on se brosse les dents" },
+      "song": null, "access": "free", "durationSeconds": 300, "video": null, "interactions": null
+    },
+    {
+      "id": "ep06", "number": 6, "family": "couleurs", "theme": "Couleurs 2", "title": null,
+      "notion": "Mélanger les couleurs",
+      "pitch": "Jaune + bleu = vert : la magie des mélanges.",
+      "activity": { "title": "Peinture : mélanger deux couleurs" },
+      "song": null, "access": "premium", "durationSeconds": 300, "video": null, "interactions": null
+    },
+    {
+      "id": "ep07", "number": 7, "family": "chiffres", "theme": "Chiffres 2", "title": null,
+      "notion": "Compter de 6 à 10",
+      "pitch": "Retrouver les 10 étoiles tombées du ciel.",
+      "activity": { "title": "Fabriquer un collier de 10 perles ou pâtes (sous la surveillance d'un adulte)" },
+      "song": null, "access": "premium", "durationSeconds": 300, "video": null, "interactions": null
+    },
+    {
+      "id": "ep08", "number": 8, "family": "emotions", "theme": "Émotions 2", "title": null,
+      "notion": "La colère et la peur",
+      "pitch": "Lolo a peur du noir ; Oupi lui montre comment respirer et se rassurer.",
+      "activity": { "title": "Dessiner sa « veilleuse magique »" },
+      "song": null, "access": "premium", "durationSeconds": 300, "video": null, "interactions": null
+    },
+    {
+      "id": "ep09", "number": 9, "family": "lettres", "theme": "Lettres", "title": null,
+      "notion": "Les voyelles A E I O U",
+      "pitch": "Les lettres se sont cachées dans les mots.",
+      "activity": { "title": "Retrouver les lettres de son prénom" },
+      "song": null, "access": "premium", "durationSeconds": 300, "video": null, "interactions": null
+    },
+    {
+      "id": "ep10", "number": 10, "family": "corps", "theme": "Le corps", "title": null,
+      "notion": "Les parties du corps",
+      "pitch": "Jeu « Jacques a dit » avec Oupi.",
+      "activity": { "title": "Tracer le contour de sa main et la décorer" },
+      "song": null, "access": "premium", "durationSeconds": 300, "video": null, "interactions": null
+    }
+  ]
+}

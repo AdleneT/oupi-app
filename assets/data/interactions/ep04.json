@@ -1,0 +1,20 @@
+{
+  "episode": 4,
+  "title": "Un cadeau pour Lolo",
+  "durationSeconds": 300,
+  "touchPauses": [
+    {
+      "id": "choix-cadeau",
+      "atSeconds": 133.0,
+      "timeoutSeconds": 8,
+      "zones": [
+        { "id": "chaussette", "x": 0.12, "y": 0.55, "w": 0.22, "h": 0.28, "correct": false, "symbol": "🧦" },
+        { "id": "caillou",    "x": 0.39, "y": 0.58, "w": 0.22, "h": 0.25, "correct": false, "symbol": "🪨" },
+        { "id": "crayons",    "x": 0.66, "y": 0.52, "w": 0.24, "h": 0.30, "correct": true,  "symbol": "🖍️" }
+      ],
+      "onWrong": "wiggle",
+      "onCorrect": "resume",
+      "onTimeout": "resume"
+    }
+  ]
+}
