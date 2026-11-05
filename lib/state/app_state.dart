@@ -42,6 +42,10 @@ class AppState extends ChangeNotifier {
   static const _kFast = 'fastPlayback';
   static const _kWatched = 'watched';
   static const _kHistory = 'history';
+  static const _kWakeUntil = 'wakeUntil';
+
+  /// Durées proposées au parent pour réveiller Oupi malgré le mode dodo.
+  static const wakeDurations = [Duration(minutes: 30), Duration(hours: 1), Duration(hours: 2)];
 
   final SharedPreferences _prefs;
   final Catalog catalog;
@@ -55,8 +59,13 @@ class AppState extends ChangeNotifier {
   bool _fastPlayback = false;
   final Set<String> _watched = {};
   final Map<String, List<String>> _history = {};
+  DateTime? _wakeUntil;
 
   bool get onboardingDone => _onboardingDone;
+
+  /// Le parent a réveillé Oupi : l'heure du dodo et la limite du jour sont suspendues jusqu'à [wakeUntil].
+  bool get wokenByParent => _wakeUntil != null && now.isBefore(_wakeUntil!);
+  DateTime? get wakeUntil => wokenByParent ? _wakeUntil : null;
   int get dailyLimit => _dailyLimit;
   int get sleepHour => _sleepHour;
   bool get premium => _premium;
@@ -71,14 +80,36 @@ class AppState extends ChangeNotifier {
       '${d.year.toString().padLeft(4, '0')}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 
   bool isSleepTime([DateTime? at]) {
-    final hour = (at ?? now).hour;
-    return hour >= _sleepHour || hour < wakeHour;
+    final time = at ?? now;
+    if (_wakeUntil != null && time.isBefore(_wakeUntil!)) return false;
+    return isWithinSleepHours(time);
   }
+
+  /// L'heure est-elle dans la plage du dodo, sans tenir compte d'un réveil par le parent ?
+  bool isWithinSleepHours(DateTime time) => time.hour >= _sleepHour || time.hour < wakeHour;
 
   int startedOn(DateTime day) => _history[dayKey(day)]?.length ?? 0;
   int get startedToday => startedOn(now);
   int get episodesLeftToday => max(0, _dailyLimit - startedToday);
-  bool get limitReached => episodesLeftToday == 0;
+  bool get limitReached => !wokenByParent && episodesLeftToday == 0;
+
+  /// Pourquoi Oupi dort, ou null s'il est réveillé. Tant qu'il dort, l'enfant n'a accès qu'à l'écran
+  /// « Il fait dodo » : seul le code parent ouvre l'espace parents, d'où l'on peut le réveiller.
+  SleepReason? get sleepReason => isSleepTime() ? SleepReason.sleepTime : (limitReached ? SleepReason.limitReached : null);
+
+  /// Réveille Oupi pour [duration], depuis l'espace parents.
+  Future<void> wakeUp(Duration duration) async {
+    _wakeUntil = now.add(duration);
+    await _prefs.setString(_kWakeUntil, _wakeUntil!.toIso8601String());
+    notifyListeners();
+  }
+
+  /// Annule le réveil : Oupi suit de nouveau l'heure du dodo et la limite du jour.
+  Future<void> sendBackToSleep() async {
+    _wakeUntil = null;
+    await _prefs.remove(_kWakeUntil);
+    notifyListeners();
+  }
 
   bool isLocked(Episode e) => e.premium && !_premium;
   bool isWatched(Episode e) => _watched.contains(e.id);
@@ -171,10 +202,12 @@ class AppState extends ChangeNotifier {
     _fastPlayback = false;
     _watched.clear();
     _history.clear();
+    _wakeUntil = null;
     notifyListeners();
   }
 
   void _load() {
+    _wakeUntil = DateTime.tryParse(_prefs.getString(_kWakeUntil) ?? '');
     _onboardingDone = _prefs.getBool(_kOnboarding) ?? false;
     _dailyLimit = (_prefs.getInt(_kDailyLimit) ?? defaultDailyLimit).clamp(minDailyLimit, maxDailyLimit);
     _sleepHour = _prefs.getInt(_kSleepHour) ?? defaultSleepHour;

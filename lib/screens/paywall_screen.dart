@@ -56,8 +56,10 @@ class _PaywallScreenState extends State<PaywallScreen> {
                             ),
                           ),
                         const SizedBox(height: 6),
-                        Text('Le contrôle du temps d’écran reste gratuit, et il n’y a jamais de publicité.',
-                            style: body(14, color: OupiColors.muted)),
+                        Text(
+                          'Le contrôle du temps d’écran reste gratuit, et il n’y a jamais de publicité.',
+                          style: body(14, color: OupiColors.muted),
+                        ),
                       ],
                     ),
                   ),
@@ -98,8 +100,10 @@ class _PaywallScreenState extends State<PaywallScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        Text('Prototype : aucun paiement réel n’est effectué.',
-                            style: body(13, weight: 700, color: OupiColors.muted)),
+                        Text(
+                          'Prototype : aucun paiement réel n’est effectué.',
+                          style: body(13, weight: 700, color: OupiColors.muted),
+                        ),
                       ],
                     ),
                   ),
@@ -123,34 +127,36 @@ class _Plan extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Material(
-        color: selected ? OupiColors.apricotSoft : Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: selected ? OupiColors.apricot : OupiColors.line, width: 2),
-        ),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20),
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-            child: Row(
-              children: [
-                Icon(selected ? Icons.radio_button_checked_rounded : Icons.radio_button_off_rounded,
-                    color: selected ? OupiColors.apricotInk : OupiColors.muted),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(title, style: body(16, weight: 800)),
-                      if (note != null) Text(note!, style: body(13, weight: 700, color: OupiColors.sageInk)),
-                    ],
-                  ),
-                ),
-                Text(price, style: display(20)),
-              ],
+    color: selected ? OupiColors.apricotSoft : Colors.white,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+      side: BorderSide(color: selected ? OupiColors.apricot : OupiColors.line, width: 2),
+    ),
+    child: InkWell(
+      borderRadius: BorderRadius.circular(20),
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+        child: Row(
+          children: [
+            Icon(
+              selected ? Icons.radio_button_checked_rounded : Icons.radio_button_off_rounded,
+              color: selected ? OupiColors.apricotInk : OupiColors.muted,
             ),
-          ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: body(16, weight: 800)),
+                  if (note != null) Text(note!, style: body(13, weight: 700, color: OupiColors.sageInk)),
+                ],
+              ),
+            ),
+            Text(price, style: display(20)),
+          ],
         ),
-      );
+      ),
+    ),
+  );
 }

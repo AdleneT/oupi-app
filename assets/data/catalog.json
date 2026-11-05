@@ -6,12 +6,13 @@
       "notion": "Rouge, jaune, bleu",
       "pitch": "Le ventre d'Oupi a perdu ses couleurs ; l'enfant l'aide à les retrouver dans la nature.",
       "activity": { "title": "Chasse aux couleurs dans la maison" },
-      "song": null, "access": "free", "durationSeconds": 300, "video": null, "interactions": null
+      "song": "Les couleurs", "songSeconds": 46, "songAudio": "assets/audio/quelle-est-ta-couleur.mp3", "songCover": "assets/images/song_couleurs.png",
+      "access": "free", "durationSeconds": 300, "video": null, "interactions": null
     },
     {
       "id": "ep02", "number": 2, "family": "formes", "theme": "Formes", "title": null,
       "notion": "Rond, carré, triangle",
-      "pitch": "Construire une maison pour Lolo avec des formes.",
+      "pitch": "Construire une maison pour Lala avec des formes.",
       "activity": { "title": "Coller des formes découpées pour faire une maison" },
       "song": null, "access": "free", "durationSeconds": 300, "video": null, "interactions": null
     },
@@ -23,9 +24,9 @@
       "song": null, "access": "free", "durationSeconds": 300, "video": null, "interactions": null
     },
     {
-      "id": "ep04", "number": 4, "family": "emotions", "theme": "Émotions 1", "title": "Un cadeau pour Lolo",
+      "id": "ep04", "number": 4, "family": "emotions", "theme": "Émotions 1", "title": "Un cadeau pour Lala",
       "notion": "La tristesse et la joie",
-      "pitch": "Lolo est triste parce que son ballon s'est envolé. L'enfant aide Oupi à lui offrir un dessin, et Lolo retrouve le sourire.",
+      "pitch": "Lala est triste parce que son ballon s'est envolé. L'enfant aide Oupi à lui offrir un dessin, et Lala retrouve le sourire.",
       "activity": {
         "title": "Un dessin-cadeau",
         "duration": "10 à 15 minutes",
@@ -64,7 +65,7 @@
     {
       "id": "ep08", "number": 8, "family": "emotions", "theme": "Émotions 2", "title": null,
       "notion": "La colère et la peur",
-      "pitch": "Lolo a peur du noir ; Oupi lui montre comment respirer et se rassurer.",
+      "pitch": "Lala a peur du noir ; Oupi lui montre comment respirer et se rassurer.",
       "activity": { "title": "Dessiner sa « veilleuse magique »" },
       "song": null, "access": "premium", "durationSeconds": 300, "video": null, "interactions": null
     },

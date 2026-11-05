@@ -13,12 +13,12 @@ class ActivitySheet {
   });
 
   factory ActivitySheet.fromJson(Map<String, dynamic> json) => ActivitySheet(
-        title: json['title'] as String,
-        duration: json['duration'] as String?,
-        materials: List<String>.from(json['materials'] as List? ?? const []),
-        steps: List<String>.from(json['steps'] as List? ?? const []),
-        question: json['question'] as String?,
-      );
+    title: json['title'] as String,
+    duration: json['duration'] as String?,
+    materials: List<String>.from(json['materials'] as List? ?? const []),
+    steps: List<String>.from(json['steps'] as List? ?? const []),
+    question: json['question'] as String?,
+  );
 
   final String title;
   final String? duration;
@@ -42,25 +42,31 @@ class Episode {
     required this.durationSeconds,
     this.title,
     this.song,
+    this.songSeconds,
+    this.songAudio,
+    this.songCover,
     this.video,
     this.interactionsAsset,
   });
 
   factory Episode.fromJson(Map<String, dynamic> json) => Episode(
-        id: json['id'] as String,
-        number: json['number'] as int,
-        family: json['family'] as String,
-        theme: json['theme'] as String,
-        title: json['title'] as String?,
-        notion: json['notion'] as String,
-        pitch: json['pitch'] as String,
-        activity: ActivitySheet.fromJson(json['activity'] as Map<String, dynamic>),
-        song: json['song'] as String?,
-        premium: json['access'] == 'premium',
-        durationSeconds: json['durationSeconds'] as int,
-        video: json['video'] as String?,
-        interactionsAsset: json['interactions'] as String?,
-      );
+    id: json['id'] as String,
+    number: json['number'] as int,
+    family: json['family'] as String,
+    theme: json['theme'] as String,
+    title: json['title'] as String?,
+    notion: json['notion'] as String,
+    pitch: json['pitch'] as String,
+    activity: ActivitySheet.fromJson(json['activity'] as Map<String, dynamic>),
+    song: json['song'] as String?,
+    songSeconds: json['songSeconds'] as int?,
+    songAudio: json['songAudio'] as String?,
+    songCover: json['songCover'] as String?,
+    premium: json['access'] == 'premium',
+    durationSeconds: json['durationSeconds'] as int,
+    video: json['video'] as String?,
+    interactionsAsset: json['interactions'] as String?,
+  );
 
   final String id;
   final int number;
@@ -71,6 +77,11 @@ class Episode {
   final String pitch;
   final ActivitySheet activity;
   final String? song;
+
+  /// Chanson de l'épisode (MP3 embarqué) et sa miniature carrée, quand elles existent.
+  final int? songSeconds;
+  final String? songAudio;
+  final String? songCover;
   final bool premium;
   final int durationSeconds;
 
@@ -87,11 +98,10 @@ class Catalog {
   const Catalog({required this.version, required this.episodes});
 
   factory Catalog.fromJson(Map<String, dynamic> json) => Catalog(
-        version: json['version'] as int,
-        episodes: [
-          for (final e in json['episodes'] as List) Episode.fromJson(e as Map<String, dynamic>),
-        ]..sort((a, b) => a.number.compareTo(b.number)),
-      );
+    version: json['version'] as int,
+    episodes: [for (final e in json['episodes'] as List) Episode.fromJson(e as Map<String, dynamic>)]
+      ..sort((a, b) => a.number.compareTo(b.number)),
+  );
 
   static const assetPath = 'assets/data/catalog.json';
 

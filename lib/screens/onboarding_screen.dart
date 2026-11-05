@@ -4,6 +4,7 @@ import '../state/app_scope.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../widgets/parent_ui.dart';
 
 /// Onboarding parent au premier lancement (GDD §9, écran 1) :
 /// la philosophie, le visionnage accompagné et la limite quotidienne.
@@ -60,7 +61,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ],
                     ),
                     const _Page(
-                      image: loloImage,
+                      image: lalaImage,
                       eyebrow: 'Visionnage accompagné',
                       title: 'Regardez avec votre enfant.',
                       lines: [
@@ -92,10 +93,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     ),
                   const Spacer(),
-                  FilledButton(
-                    onPressed: _next,
-                    child: Text(_page == _count - 1 ? 'Commencer' : 'Suivant'),
-                  ),
+                  FilledButton(onPressed: _next, child: Text(_page == _count - 1 ? 'Commencer' : 'Suivant')),
                 ],
               ),
             ],
@@ -115,41 +113,59 @@ class _Page extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
-        builder: (context, c) => Row(
+    builder: (context, c) => Row(
+      children: [
+        // Le personnage détouré se tient devant un soleil, un clin d'œil au monde côté enfant.
+        Stack(
+          alignment: Alignment.bottomCenter,
+          clipBehavior: Clip.none,
           children: [
-            BreathingCharacter(asset: image, height: (c.maxHeight * 0.92).clamp(140, 420)),
-            const SizedBox(width: 36),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(eyebrow.toUpperCase(), style: body(13, weight: 800, color: OupiColors.apricotInk)),
-                    const SizedBox(height: 8),
-                    Text(title, style: display(30, height: 1.15)),
-                    const SizedBox(height: 16),
-                    for (final line in lines)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.only(top: 8, right: 10),
-                              child: CircleAvatar(radius: 4, backgroundColor: OupiColors.apricot),
-                            ),
-                            Expanded(child: Text(line, style: body(17))),
-                          ],
-                        ),
-                      ),
-                  ],
+            Positioned(
+              top: c.maxHeight * 0.06,
+              child: Container(
+                width: c.maxHeight * 0.72,
+                height: c.maxHeight * 0.72,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(colors: [Vivid.sunny.withValues(alpha: 0.45), Vivid.mango.withValues(alpha: 0.12)]),
                 ),
               ),
             ),
+            BreathingCharacter(asset: image, height: (c.maxHeight * 0.92).clamp(140, 420)),
           ],
         ),
-      );
+        const SizedBox(width: 36),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(eyebrow.toUpperCase(), style: body(13, weight: 800, color: OupiColors.apricotInk)),
+                const SizedBox(height: 8),
+                Text(title, style: display(30, height: 1.15)),
+                const SizedBox(height: 16),
+                for (final line in lines)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(top: 8, right: 10),
+                          child: CircleAvatar(radius: 4, backgroundColor: OupiColors.apricot),
+                        ),
+                        Expanded(child: Text(line, style: body(17))),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class _SettingsPage extends StatelessWidget {
@@ -161,63 +177,59 @@ class _SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
-        child: Column(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('RÉGLAGES', style: body(13, weight: 800, color: OupiColors.apricotInk)),
+        const SizedBox(height: 8),
+        Text('Choisissez le rythme d’Oupi.', style: display(30)),
+        const SizedBox(height: 6),
+        Text('Vous pourrez tout changer plus tard dans l’espace parents.', style: body(16, color: OupiColors.muted)),
+        const SizedBox(height: 22),
+        // Deux colonnes : tout tient sur un téléphone à l'horizontale.
+        Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('RÉGLAGES', style: body(13, weight: 800, color: OupiColors.apricotInk)),
-            const SizedBox(height: 8),
-            Text('Choisissez le rythme d’Oupi.', style: display(30)),
-            const SizedBox(height: 6),
-            Text('Vous pourrez tout changer plus tard dans l’espace parents.', style: body(16, color: OupiColors.muted)),
-            const SizedBox(height: 22),
-            // Deux colonnes : tout tient sur un téléphone à l'horizontale.
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Épisodes par jour', style: body(17, weight: 800)),
-                      const SizedBox(height: 8),
-                      SegmentedButton<int>(
-                        segments: [
-                          for (var v = AppState.minDailyLimit; v <= AppState.maxDailyLimit; v++)
-                            ButtonSegment(value: v, label: Text('$v')),
-                        ],
-                        selected: {limit},
-                        showSelectedIcon: false,
-                        onSelectionChanged: (s) => onLimit(s.first),
-                      ),
-                      const SizedBox(height: 8),
-                      Text('1 par jour est conseillé.', style: body(15, color: OupiColors.muted)),
-                    ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Épisodes par jour', style: body(17, weight: 800)),
+                  const SizedBox(height: 8),
+                  ChoicePills<int>(
+                    values: [for (var v = AppState.minDailyLimit; v <= AppState.maxDailyLimit; v++) v],
+                    selected: limit,
+                    recommended: AppState.defaultDailyLimit,
+                    label: (v) => '$v',
+                    onSelected: onLimit,
                   ),
-                ),
-                const SizedBox(width: 32),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Oupi s’endort à', style: body(17, weight: 800)),
-                      const SizedBox(height: 8),
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: [
-                          for (final h in AppState.sleepHourChoices)
-                            ChoiceChip(label: Text('$h h'), selected: h == sleepHour, onSelected: (_) => onSleepHour(h)),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Text('19 h est conseillé. Il se réveille à ${AppState.wakeHour} h.',
-                          style: body(15, color: OupiColors.muted)),
-                    ],
+                  const SizedBox(height: 8),
+                  Text('Un épisode dure 5 minutes.', style: body(15, color: OupiColors.muted)),
+                ],
+              ),
+            ),
+            const SizedBox(width: 32),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Oupi s’endort à', style: body(17, weight: 800)),
+                  const SizedBox(height: 8),
+                  ChoicePills<int>(
+                    values: AppState.sleepHourChoices,
+                    selected: sleepHour,
+                    recommended: AppState.defaultSleepHour,
+                    label: (h) => '$h h',
+                    onSelected: onSleepHour,
                   ),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  Text('Il se réveille à ${AppState.wakeHour} h.', style: body(15, color: OupiColors.muted)),
+                ],
+              ),
             ),
           ],
         ),
-      );
+      ],
+    ),
+  );
 }

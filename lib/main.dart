@@ -12,5 +12,9 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
   final prefs = await SharedPreferences.getInstance();
   final catalog = await Catalog.load(rootBundle);
-  runApp(OupiApp(state: AppState(prefs: prefs, catalog: catalog)));
+  runApp(
+    OupiApp(
+      state: AppState(prefs: prefs, catalog: catalog),
+    ),
+  );
 }

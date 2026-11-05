@@ -12,14 +12,9 @@ class OupiApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AppScope(
-        state: state,
-        child: MaterialApp(
-          title: 'Oupi',
-          debugShowCheckedModeBanner: false,
-          theme: buildTheme(),
-          home: const RootGate(),
-        ),
-      );
+    state: state,
+    child: MaterialApp(title: 'Oupi', debugShowCheckedModeBanner: false, theme: buildTheme(), home: const RootGate()),
+  );
 }
 
 /// Premier lancement : onboarding parent. Ensuite : l'accueil.
@@ -27,6 +22,5 @@ class RootGate extends StatelessWidget {
   const RootGate({super.key});
 
   @override
-  Widget build(BuildContext context) =>
-      AppScope.of(context).onboardingDone ? const HomeScreen() : const OnboardingScreen();
+  Widget build(BuildContext context) => AppScope.of(context).onboardingDone ? const HomeScreen() : const OnboardingScreen();
 }

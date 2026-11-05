@@ -95,7 +95,10 @@ class _ParentGateScreenState extends State<ParentGateScreen> {
                     AnimatedOpacity(
                       opacity: _wrong ? 1 : 0,
                       duration: const Duration(milliseconds: 250),
-                      child: Text('Ce n’est pas ça. Voici un nouveau nombre.', style: body(15, weight: 700, color: OupiColors.bad)),
+                      child: Text(
+                        'Ce n’est pas ça. Voici un nouveau nombre.',
+                        style: body(15, weight: 700, color: OupiColors.bad),
+                      ),
                     ),
                   ],
                 ),
@@ -117,22 +120,22 @@ class _Keypad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget key(String label, {VoidCallback? onTap, IconData? icon}) => Padding(
-          padding: const EdgeInsets.all(5),
-          child: SizedBox(
-            width: 72,
-            height: 56,
-            child: OutlinedButton(
-              onPressed: onTap ?? () => onDigit(label),
-              style: OutlinedButton.styleFrom(
-                padding: EdgeInsets.zero,
-                minimumSize: const Size(72, 56),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                backgroundColor: Colors.white,
-              ),
-              child: icon != null ? Icon(icon) : Text(label, style: display(24)),
-            ),
+      padding: const EdgeInsets.all(5),
+      child: SizedBox(
+        width: 72,
+        height: 56,
+        child: OutlinedButton(
+          onPressed: onTap ?? () => onDigit(label),
+          style: OutlinedButton.styleFrom(
+            padding: EdgeInsets.zero,
+            minimumSize: const Size(72, 56),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            backgroundColor: Colors.white,
           ),
-        );
+          child: icon != null ? Icon(icon) : Text(label, style: display(24)),
+        ),
+      ),
+    );
     return FittedBox(
       child: Column(
         mainAxisSize: MainAxisSize.min,

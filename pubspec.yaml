@@ -25,6 +25,8 @@ flutter:
     - assets/images/
     - assets/data/
     - assets/data/interactions/
+    - assets/videos/
+    - assets/audio/
 
   # Polices embarquées (licence SIL OFL, voir assets/fonts/OFL-*.txt) :
   # aucune requête réseau vers un serveur tiers, comme l'exigent les catégories Enfants.
