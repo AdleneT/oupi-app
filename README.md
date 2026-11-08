@@ -12,22 +12,58 @@ flutter run           # sur l’émulateur Android ou un appareil branché
 
 Outils installés sur ce PC : Flutter dans `C:\dev\flutter`, Java 17 dans `C:\dev\jdk-17`, SDK Android dans `%LOCALAPPDATA%\Android\Sdk`. Le projet est dans un chemin sans espace ni accent, car Gradle plante souvent sinon sous Windows.
 
+Sur le Mac : Flutter stable dans `~/development/flutter` (ajouter `export PATH="$HOME/development/flutter/bin:$PATH"` au `~/.zshrc`), Xcode 26 et le simulateur iPhone. Pas de CocoaPods : les plugins iOS passent par Swift Package Manager (`flutter config --enable-swift-package-manager`). Le SDK Android n'est pas encore installé sur le Mac.
+
+## Architecture hexagonale
+
+Le domaine ne dépend ni de Flutter ni du stockage. Les écrans ne parlent qu'à `AppState`, qui appelle des cas d'usage, qui parlent à des ports. Les adaptateurs ne sont branchés qu'au démarrage, dans `main.dart`.
+
+```
+lib/
+├── domain/                      Dart pur, testable sans Flutter
+│   ├── entities/                Episode, Catalog, ParentalSettings, ViewingHistory, Interactions
+│   ├── rules/                   ViewingRules (verrou > dodo > limite), ParentGateChallenge
+│   ├── ports/                   CatalogRepository, SettingsRepository, HistoryRepository, Clock
+│   └── usecases/                BootstrapApp, StartEpisode, FinishEpisode, UpdateSettings, ResetApp, ScreenTimeReport
+├── application/                 AppState (façade ChangeNotifier pour les widgets), AppScope
+├── infrastructure/              adaptateurs des ports
+│   ├── assets/                  AssetCatalogRepository + mapping JSON
+│   ├── persistence/             SharedPrefs{Settings,History}Repository (mêmes clés que le prototype)
+│   ├── memory/                  dépôts en mémoire pour les tests
+│   └── clock.dart               SystemClock, FakeClock
+├── presentation/                écrans, widgets, thème, navigation, responsive.dart
+└── main.dart                    racine de composition
+```
+
+Règles de dépendance : `presentation → application → domain ← infrastructure`. Rien dans `domain/` n'importe `package:flutter`. Pour changer de stockage (fichier, base locale, nuage) ou de source de catalogue (en ligne), on écrit un nouvel adaptateur et on le branche dans `main.dart` : les écrans et les règles ne bougent pas.
+
+## Responsive
+
+Chaque écran se construit à partir de `Layout` (`lib/presentation/responsive.dart`) et d'un `LayoutBuilder` : tailles en proportion de la hauteur et de la largeur, jamais en pixels fixes.
+
+- `Layout.screenClass` (compact, medium, expanded) selon le côté le plus court, `isPortrait`, `isNarrow`.
+- `Layout.scale` met les tailles à l'échelle (1 sur un iPhone à l'horizontale, jusqu'à 1,5 sur grand écran) ; `textScale` agrandit doucement les textes sur tablette en respectant le réglage d'accessibilité.
+- `characterHeight()` borne un personnage par la hauteur **et** la largeur disponibles.
+- Les rangées deviennent des colonnes quand l'écran est étroit (`AdaptiveFlex`) ; les listes horizontales deviennent des grilles en portrait ; le rail de l'espace parents devient une rangée d'onglets.
+- `test/responsive_test.dart` monte chaque écran sur huit tailles d'écran (téléphones, tablettes, portrait, grand écran) et échoue au moindre débordement.
+
+
 ## Ce que fait le prototype
 
 | Écran (GDD §9) | Fichier | État |
 |---|---|---|
-| Onboarding parent | `lib/screens/onboarding_screen.dart` | Philosophie, visionnage accompagné, limite par jour et heure du dodo |
-| Accueil | `lib/screens/home_screen.dart` | Oupi qui respire, 3 gros boutons sans texte, accès parents discret |
-| Épisodes | `lib/screens/episodes_screen.dart` | Vignettes rangées par couleur de thème, pousse sur les vus, cadenas doux |
-| Lecteur | `lib/screens/player_screen.dart` | Plein écran, un bouton pause, pas de barre de progression, pauses tactiles |
-| Écran de repos | `lib/screens/rest_screen.dart` | Ciel étoilé, aucun autre épisode, bouton maison discret |
-| Musique | `lib/screens/music_screen.dart` | Juke-box pour les abonnés, cadenas en gratuit |
-| Galerie souvenirs | `lib/screens/gallery_screen.dart` | État vide pour l’instant |
-| Contrôle parental | `lib/screens/parent_gate_screen.dart` | « Écris en chiffres : quarante-sept » |
-| Espace parents | `lib/screens/parent_space_screen.dart` | Temps d’écran, activités, repères, abonnement, réglages |
-| Il fait dodo | `lib/screens/sleep_screen.dart` | Limite atteinte ou heure du dodo |
+| Onboarding parent | `lib/presentation/screens/onboarding_screen.dart` | Philosophie, visionnage accompagné, limite par jour et heure du dodo |
+| Accueil | `lib/presentation/screens/home_screen.dart` | Oupi qui respire, 3 gros boutons sans texte, accès parents discret |
+| Épisodes | `lib/presentation/screens/episodes_screen.dart` | Vignettes rangées par couleur de thème, pousse sur les vus, cadenas doux |
+| Lecteur | `lib/presentation/screens/player_screen.dart` | Plein écran, un bouton pause, pas de barre de progression, pauses tactiles |
+| Écran de repos | `lib/presentation/screens/rest_screen.dart` | Ciel étoilé, aucun autre épisode, bouton maison discret |
+| Musique | `lib/presentation/screens/music_screen.dart` | Juke-box pour les abonnés, cadenas en gratuit |
+| Galerie souvenirs | `lib/presentation/screens/gallery_screen.dart` | État vide pour l’instant |
+| Contrôle parental | `lib/presentation/screens/parent_gate_screen.dart` | « Écris en chiffres : quarante-sept » |
+| Espace parents | `lib/presentation/screens/parent_space_screen.dart` | Temps d’écran, activités, repères, abonnement, réglages |
+| Il fait dodo | `lib/presentation/screens/sleep_screen.dart` | Limite atteinte ou heure du dodo |
 
-**Règles appliquées** (`lib/state/app_state.dart`, couvertes par les tests) :
+**Règles appliquées** (`lib/domain/rules/viewing_rules.dart`, couvertes par les tests) :
 - 1 épisode par jour par défaut (réglable de 1 à 3), compté au lancement.
 - L’appli dort de 19 h (réglable de 17 h à 21 h) jusqu’à 7 h.
 - Un épisode abonné ouvre « Oups ! Demande à papa ou maman », puis le contrôle parental, jamais un écran d’achat.
